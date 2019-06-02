@@ -146,3 +146,145 @@ certa di un viso l'immagine viene scartata, altrimenti è passata allo \textit{s
     \end{small}
 \end{figure}
 
+\newpage
+
+\section{Regressioni e Machine Learning}
+
+La regressione è una tecnica statistica utilizzata per determinare la relazione che persiste tra
+due o più variabili: essa è principalmente adoperata per predizioni e inferenze.
+
+Nella sua forma più semplice (bivariata) la regressione mostra la relazione tra una variabile 
+indipendente $X$ ed una variabile dipendente, $Y$, attraverso un'equazione del tipo
+
+\begin{equation}
+    Y = \beta_0 + \beta_1 X + u
+    \label{eq:biv_regression}
+\end{equation}
+
+La regressione riesce quindi a quantificare quanto la variazione di una variabile è dipendente 
+dalla variazione di un'altra; quello che invece la non è capace di dimostrare è la casualità, 
+la quale è dimostrata solo analiticamente \cite{campbell2008introduction}.
+
+\begin{figure}[bh]
+    \begin{small}
+        \begin{center}
+            \includegraphics[width=0.50\textwidth]{regression.png}
+        \end{center}
+        \caption{Un esempio di utilizzo di regressione lineare: la retta cerca 
+            di stimare la relazione tra le due grandezze raffigurate}
+        \label{fig:}
+    \end{small}
+\end{figure}
+
+\subsection{Reti neurali}
+
+Negli ultimi decenni il Machine Learning è diventato uno dei principali strumenti utilizzati in 
+ambito informatico grazie alla grande mole di dati che è possibile ormai raccogliere e si può 
+addirittura pensare che il suo influsso negli prossimi anni si accrescerà ulteriormente \cite{Smola2008}.
+
+In questo ambito ricoprono grande importanza le reti neurali, un tecnologia che che si è rivelata
+molto adatta all'individuazione ed al riconoscimento di pattern statistici \cite{bishop2006pattern},
+in particolare i \textit{multilayer perceptron}, i quali si basano sulla combinazione di una serie di funzioni con pesi variabili.
+
+\begin{figure}
+    \begin{small}
+        \begin{center}
+            \includegraphics[width=0.95\textwidth]{perceptron_network.png}
+        \end{center}
+        \caption{Un esempio di rete neurale \textit{multilayer perceptron} in cui è 
+            possibile distinguere diversi livelli di nodi: un livello di input, 
+            due layer nascosti ed uno di output}
+        \label{fig:nn}
+    \end{small}
+\end{figure}
+
+In ciascuno dei nodi del primo livello ad esempio (come mostrato in \ref{fig:nn}) viene calcolato un certo valore 
+di attivazione pari a 
+
+\begin{equation}
+    a_j = \sum_{i=1}^{D} w_{ij}^{(1)} x_i + w_{j0}^{(1)}
+    \label{eq:node_nn}
+\end{equation}
+
+con D numero di ingressi della rete, $x_i$ valore dell'input i-esimo; i $w_{j0}^{(1)}$, chiamati \textit{bias}, sono coefficienti fissati
+del primo layer e 
+$w_{ij}^{(1)}$, chiamati \textit{weights}, coefficienti che verranno modificati per adattarsi al modello che dovranno stimare.
+
+L'output del nodo j-esimo (che verrà in seguito utilizzato come precedentemente era stato fatto con gli input) sarà quindi
+\cite{bishop2006pattern}
+
+\begin{equation}
+    z_j = h(a_j)
+    \label{eq:activation}
+\end{equation}
+
+con $h()$ funzione non lineare definita \textit{activation function}, che solitamente corrisponde ad una $tanh$, ad una 
+ReLU, definita come \cite{Nwankpa2018}
+
+\begin{equation}
+    ReLU(x) = \max (x, 0)
+    \label{eq:relu}
+\end{equation}
+
+\noindent
+oppure ad una sigmoide \cite{Nwankpa2018}
+
+\begin{equation}
+    \sigma(x) = \frac{1}{1+e^{-x}}
+    \label{eq:sigmoid}
+\end{equation}
+
+
+Nel layer finale questa funzione di attivazione varia a seconda della tipologia di problema: nel caso di regressione 
+corrisponde all'identità, 
+viceversa nella classificazione viene spesso usata una softmax \cite{Keck2014}, che restituisce per 
+l'elemento in posizione $j$ nel layer di output 
+
+\begin{equation}
+    \mathbf{\sigma(z)}_j = \frac{e^{z_j}}{\sum_{k=1}^{K}e^{z_k}}
+    \label{eq:softmax}
+\end{equation}
+
+\begin{figure}[h]
+    \begin{small}
+        \begin{center}
+            \includegraphics[width=0.70\textwidth]{single_perceptron.png}
+        \end{center}
+        \caption{Le operazioni algebriche per il calcolo dell'output di un singolo nodo}
+        \label{fig:}
+    \end{small}
+\end{figure}
+
+\subsubsection{Backpropagation} 
+
+Fase fondamentale per una rete neurale è quella nella quale vengono analizzati i dati a disposizione 
+(\textit{training}): è questa la fase nella quale, attraverso la cosiddetta \textit{backpropagation}, 
+i pesi vengono adattati al problema in questione.
+
+Questo corrisponde a cercare di minimizzare la seguente funzione di errore \cite{bishop2006pattern}
+
+\begin{equation}
+    E(\mathbf{w}) = \frac{1}{2} \sum_{n=1}^{N} || \mathbf{y(x_n, w) - t_n} || ^2
+    \label{eq:error_nn}
+\end{equation}
+
+con $\mathbf{y(x_n, w)}$ output della rete e $\mathbf{t_n}$ target.
+
+Questo miglioramento della rete viene effettuato modificando i pesi delle funzioni 
+precedentemente definite, propagando all'indietro nella rete neurale il valore dell'errore:
+viene calcolata la dipendenza dell'errore da ciascuno dei pesi, i.e.
+
+\begin{equation}
+    \frac{\partial E}{\partial w_{ij}} 
+    \label{eq:err_nn}
+\end{equation}
+
+Che viene quindi utilizzato per modificare i pesi nel seguente modo \cite{Mazur2015}
+
+\begin{equation}
+    w_{ij}' = w_{ij} - \eta  \frac{\partial E}{\partial w_{ij}}
+    \label{eq:back_err}
+\end{equation}
+
+\noindent
+con $\eta$ \textit{learning step}, un parametro definito inizialmente.
