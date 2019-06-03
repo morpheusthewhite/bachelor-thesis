@@ -288,3 +288,146 @@ Che viene quindi utilizzato per modificare i pesi nel seguente modo \cite{Mazur2
 
 \noindent
 con $\eta$ \textit{learning step}, un parametro definito inizialmente.
+
+\newpage
+
+\section{Programmazione lineare}
+
+La programmazione matematica studia la teoria ed i metodi utili per la ricerca 
+di massimi o minimi di una funzione matematica, i.e. problemi del tipo 
+\cite{walsh1985introduction}
+
+\begin{center}
+    minimizzare (o massimizzare) $f(x_1, \dots, x_n)$ soggetta a $(x_1, \dots, x_n)$ in $X$    
+\end{center}
+
+All'interno di essa ricopre 
+grande importanza la programmazione lineare, che si occupa in particolare di risolvere 
+problemi i cui vincoli e la funzione da minimizzare o massimizzare (detta 
+\textit{funzione obiettivo}) sono tutte relazioni lineari\cite{walsh1985introduction}.
+Si può facilmente vedere come un generico problema di questo tipo, (ad esempio di minimizzazione) 
+possa essere scritto nella forma\cite{1990}
+
+\begin{equation*}
+    \min f(x)
+    \label{eq:}
+\end{equation*}
+\begin{equation*}
+    Ax \geq b, x \geq 0
+    \label{eq:}
+\end{equation*}
+
+\subsection{Programmazione lineare multiobiettivo}
+
+Un'ulteriore classe di problemi di programmazione matematica è costituita dai cosidetti
+problemi multiobiettivo. In questo caso, denotando con 
+
+\begin{equation*}
+    \mathbf{\theta} = (\theta_1(x), \dots, \theta_p(x))
+    \label{eq:}
+\end{equation*}
+
+il vettore delle p funzioni obiettivo, allora il problema consiste nel trovare le 
+cosiddette soluzioni efficienti (o \textbf{ottimi di Pareto}), ovvero tutte $\bar{x}$ tali 
+che non esiste $x$ ammissibile (cioè che rispetta tutti i vincoli) tale che 
+$\mathbf{\theta}(x) \leq \mathbf{\theta}(\bar{x})$ (nel caso di minimo) e 
+$x \neq \bar{x}$ \cite{walsh1985introduction}.
+
+L'insieme di queste soluzioni viene solitamente definito \textbf{frontiera di Pareto}, 
+ed essa è graficamente visibile se si rappresenta l'insieme dei valori ammissibili nello 
+spazio degli obiettivi Y, cioè l'insieme dei valori assunti da tutte $x \in X$ 
+(le $x$ ammissibili).
+
+\begin{figure}
+    \begin{small}
+        \begin{center}
+            \includegraphics[width=0.70\textwidth]{multiobjective_example.png}
+        \end{center}
+        \caption{I segmenti in rosso rappresentano la frontiera di Pareto
+            in un ipotetico problema di minimo: i punti da cui sono generati i 
+            quadranti inferiori non contengono altri elementi dell'insieme 
+            ammissibile nello spazio delle soluzioni}
+        \label{fig:obj}
+    \end{small}
+\end{figure}
+
+Nel caso di due funzioni obiettivo (Figure~\ref{fig:obj}) i punti appartenenti 
+alla frontiera di Pareto sono facilmente verificabili attraverso la regola del quadrante
+inferiore, cioè non vi devono essere elementi contenuti nel quadrante in basso a sinistra 
+rispetto al punto considerato.
+
+\subsubsection{Teorema di Geoffrion} 
+Per il calcolo delle soluzioni efficienti si rivela molto utile il teorema di Geoffrion, il
+quale enuncia che \cite{Figueira2006}, considerando il seguente problema multiobiettivo
+
+\begin{equation*}
+    \min (Cx)    
+    \label{eq:}
+\end{equation*}
+\begin{equation}
+    Ax \geq b, x \geq 0
+    \label{eq:multi_problem}
+\end{equation}
+
+\noindent
+con $C \in $\Rset$_{p \times n}$ matrice delle $p$ funzioni obiettivo,
+
+allora una soluzione $x$ è un ottimo di Pareto $\iff \exists \lambda = (\lambda_1, \dots, 
+\lambda_p) \geq 0$, $\sum_{i=1}^{p} \lambda_i = 1$ tale che $x$ è ottima per il seguente 
+problema
+
+\begin{equation*}
+    \min (\lambda Cx)    
+    \label{eq:}
+\end{equation*}
+\begin{equation*}
+    Ax \geq b, x \geq 0
+    \label{eq:}
+\end{equation*}
+
+\subsection{Programmazione lineare intera multiobiettivo}
+
+Nel caso in cui il problema multiobiettivo ha l'ulteriore vincoli delle variabili intere,
+allora per il calcolo della frontiera di Pareto (trasformando il problema in un singolo 
+obiettivo, processo detto di \textit{scalarizzazione}) si può ricorrere a due diversi metodi: 
+il \textbf{metodo dei pesi} oppure il metodo \textbf{$\epsilon$-constraints}. 
+
+\subsubsection{Metodo dei pesi}
+
+Il metodo dei pesi è il più noto metodo di scalarizzazione: esso consiste nel far variare 
+$\lambda = (\lambda_1, \dots, \lambda_p) \geq 0$, con $\sum_{i=1}^{p} \lambda_i = 1$ trasformando 
+\ref{eq:multi_problem} (dotato dell'ulteriore vincolo $x \in$ \Zset$^n$) in 
+
+\begin{equation*}
+    \min (\lambda Cx)    
+    \label{eq:}
+\end{equation*}
+\begin{equation*}
+    Ax \geq b, x\geq 0
+    \label{eq:}
+\end{equation*}
+
+E' importante però notare che questo metodo non permette di calcolare tutta la frontiera di Pareto:
+esso genere solo un sottoinsieme di punti che si definisce \textbf{supportato}. 
+
+\subsubsection{Metodo $\epsilon$-constraints}
+
+In questo caso una sola delle $p$ funzioni obiettivo rimane tale mentre le altre sono trasformate in 
+dei vincoli \cite{Figueira2006}.
+
+Il problema è quindi riformulato nella forma (per $x \in$ \Zset$^n$)
+
+\begin{equation*}
+    \min (c_kx)    
+    \label{eq:}
+\end{equation*}
+\begin{equation*}
+    \min (c_ix \leq \epsilon_i)  \quad \forall i \in \{1, \dots, p\}, i \neq k   
+    \label{eq:}
+\end{equation*}
+\begin{equation*}
+    Ax \geq 0, x \geq 0
+    \label{eq:}
+\end{equation*}
+
+A differenza del metodo dei pesi, riesce a generare tutte le soluzioni efficienti.
