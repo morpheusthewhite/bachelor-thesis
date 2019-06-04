@@ -1,4 +1,5 @@
 \chapter{State of the art}
+\label{section:state_of_the_art}
 
 In questo capitolo saranno inizialmente esposti i concetti teorici alla base dell'applicazione 
 sviluppata: dagli algoritmi più comuni per la \textbf{Face Detection} 
@@ -8,6 +9,7 @@ poi con elementi di \textbf{Programmazione Lineare Multiobiettivo}.
 Verranno quindi analizzati precedenti progetti che hanno affrontato le stesse problematiche.
 
 \section{Face Detection}
+\label{section:face_detection}
 
 La Face Detection è una tecnologia
 che permette di localizzare ed estrarre da un'immagine la regione contenente un 
@@ -25,6 +27,7 @@ video coding al content-based image retrieval.
 \end{figure}
 
 \subsection{Problematiche comuni}
+\label{section:face_detection_problems}
 
 Le sfide che una tecnica di face detection si trova ad affrontare sono solitamente 
 (\cite{Datta2015}):
@@ -51,6 +54,7 @@ Le sfide che una tecnica di face detection si trova ad affrontare sono solitamen
 \end{figure}
 
 \subsection{Approcci feature-based}
+\label{section:face_detection_approaches}
 
 In un periodo di ricerca che coinvolge circa gli ultimi trenta anni sono state 
 usati diversi approcci che permettessero di sviluppare tecniche di face detection
@@ -75,6 +79,7 @@ All'interno di questa categoria possono essere indivuate ulteriori distinzioni
 \end{itemize}
 
 \subsection{Algoritmo Viola-Jones per la Face Detection}
+\label{section:viola_jones}
 
 Invece tra gli svariati approcci \textbf{Image-based} uno che ha avuto particolare successo, soprattutto per la 
 velocità di calcolo che permette il suo utilizzo in applicazioni che utilizzano grandi 
@@ -149,6 +154,7 @@ certa di un viso l'immagine viene scartata, altrimenti è passata allo \textit{s
 \newpage
 
 \section{Regressioni e Machine Learning}
+\label{section:regression_ml}
 
 La regressione è una tecnica statistica utilizzata per determinare la relazione che persiste tra
 due o più variabili: essa è principalmente adoperata per predizioni e inferenze.
@@ -177,6 +183,7 @@ la quale è dimostrata solo analiticamente \cite{campbell2008introduction}.
 \end{figure}
 
 \subsection{Reti neurali}
+\label{section:neural_nets}
 
 Negli ultimi decenni il Machine Learning è diventato uno dei principali strumenti utilizzati in 
 ambito informatico grazie alla grande mole di dati che è possibile ormai raccogliere e si può 
@@ -256,6 +263,7 @@ l'elemento in posizione $j$ nel layer di output
 \end{figure}
 
 \subsubsection{Backpropagation} 
+\label{section:backprop}
 
 Fase fondamentale per una rete neurale è quella nella quale vengono analizzati i dati a disposizione 
 (\textit{training}): è questa la fase nella quale, attraverso la cosiddetta \textit{backpropagation}, 
@@ -292,6 +300,7 @@ con $\eta$ \textit{learning step}, un parametro definito inizialmente.
 \newpage
 
 \section{Programmazione lineare}
+\label{section:lin_programming}
 
 La programmazione matematica studia la teoria ed i metodi utili per la ricerca 
 di massimi o minimi di una funzione matematica, i.e. problemi del tipo 
@@ -318,6 +327,7 @@ possa essere scritto nella forma\cite{1990}
 \end{equation*}
 
 \subsection{Programmazione lineare multiobiettivo}
+\label{section:lin_programming_mo}
 
 Un'ulteriore classe di problemi di programmazione matematica è costituita dai cosidetti
 problemi multiobiettivo. In questo caso, denotando con 
@@ -356,7 +366,9 @@ alla frontiera di Pareto sono facilmente verificabili attraverso la regola del q
 inferiore, cioè non vi devono essere elementi contenuti nel quadrante in basso a sinistra 
 rispetto al punto considerato.
 
-\subsubsection{Teorema di Geoffrion} 
+\subsubsection{Teorema di Geoffrion}
+\label{section:geoffrion}
+
 Per il calcolo delle soluzioni efficienti si rivela molto utile il teorema di Geoffrion, il
 quale enuncia che \cite{Figueira2006}, considerando il seguente problema multiobiettivo
 
@@ -386,6 +398,7 @@ problema
 \end{equation*}
 
 \subsection{Programmazione lineare intera multiobiettivo}
+\label{section:plimo}
 
 Nel caso in cui il problema multiobiettivo ha l'ulteriore vincoli delle variabili intere,
 allora per il calcolo della frontiera di Pareto (trasformando il problema in un singolo 
@@ -393,6 +406,7 @@ obiettivo, processo detto di \textit{scalarizzazione}) si può ricorrere a due d
 il \textbf{metodo dei pesi} oppure il metodo \textbf{$\epsilon$-constraints}. 
 
 \subsubsection{Metodo dei pesi}
+\label{section:weight_method}
 
 Il metodo dei pesi è il più noto metodo di scalarizzazione: esso consiste nel far variare 
 $\lambda = (\lambda_1, \dots, \lambda_p) \geq 0$, con $\sum_{i=1}^{p} \lambda_i = 1$ trasformando 
@@ -411,6 +425,7 @@ E' importante però notare che questo metodo non permette di calcolare tutta la 
 esso genere solo un sottoinsieme di punti che si definisce \textbf{supportato}. 
 
 \subsubsection{Metodo $\epsilon$-constraints}
+\label{section:epsilon_constraints}
 
 In questo caso una sola delle $p$ funzioni obiettivo rimane tale mentre le altre sono trasformate in 
 dei vincoli \cite{Figueira2006}.
@@ -435,6 +450,7 @@ A differenza del metodo dei pesi, riesce a generare tutte le soluzioni efficient
 \newpage
 
 \section{Lavori precedenti}
+\label{section:past_works}
 
 Le problematiche che si pone di risolvere questa applicazione sono state 
 precedentemente trattate in altri lavori: l'idea di progettare un sistema 
