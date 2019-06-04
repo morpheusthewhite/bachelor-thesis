@@ -1,0 +1,88 @@
+\chapter{Metodi}
+\label{section:methods}
+
+Per lo sviluppo di questa applicazione si è scelto il linguaggio Python per la sua semplicità 
+e immediatezza; ugualmente si sarebbe potuto optare per linguaggi come C++ o Java senza in alcun 
+modo dover modificare la logica sviluppata.
+
+\section{Individuazione degli studenti}
+\label{section:methods_face_detection}
+
+Il primo \textit{step} che è necessario affrontare nello sviluppo di questa applicazione
+è la \textit{face detection} per individuare il numero di studenti presenti nelle immagini 
+fornite. 
+
+Si è deciso di utilizzare, per ovviare a questa problematica, alla libreria offerta da OpenCV, 
+la quale offre inoltre dei classificatori pre-trainati (che utilizzano gli algoritmi introdotti 
+in \ref{section:viola_jones}).
+
+\begin{figure}
+    \begin{small}
+        \begin{center}
+            \includegraphics[width=0.20\textwidth]{opencv.png}
+        \end{center}
+        \caption{Il logo di OpenCV}
+        \label{fig:opencv}
+    \end{small}
+\end{figure}
+
+Tra questi sono stati scelti un modello per il riconoscimento dei volti visti frontalmente ed 
+uno per il riconoscimento di quelli visti di profilo, rispettivamente il \lstinline{haarcascade_frontalface_default.xml} 
+e \lstinline{haarcascade_profileface.xml}.
+
+\begin{minted}{python}
+face_cascade_frontal = cv.CascadeClassifier(os.path.join(CLASSIFIERS_FOLDER, CLASSIFIER_FILENAME_FRONTAL))
+face_cascade_profile = cv.CascadeClassifier(os.path.join(CLASSIFIERS_FOLDER, CLASSIFIER_FILENAME_PROFILE))
+\end{minted}
+
+Le facce riconosciute sono uguali all'unione di quelle riconosciute dai singoli classificatori
+
+\begin{minted}{python}
+# detect faces
+faces_profile = face_cascade_profile.detectMultiScale(img_gray, 1.3, 5)
+faces_frontal = face_cascade_frontal.detectMultiScale(img_gray, 1.3, 5)
+
+# merge faces detected
+faces = list(faces_profile) + list(faces_frontal)
+\end{minted} 
+
+Per evitare che delle facce, riconosciute da entrambi i modelli, siano contate più di una volta, è stato poi
+inserito un ulteriore controllo con una soglia sull'area di overlapping dei rettangoli che contengono i visi:
+in questo modo se l'area in comune tra due di essi rapportata all'area di uno dei due è maggiore di una certa 
+soglia, uno dei due è scartato.
+
+\begin{minted}{python}
+valid_faces = []
+# filter overlapping faces
+for i in range(len(faces)):
+    (x1, y1, w1, h1) = faces[i]
+    other_faces = faces[i + 1:]
+
+    valid_faces.append(faces[i])
+
+    for (x2, y2, w2, h2) in other_faces:
+        overlapping_area = get_overlapping_area(x1, y1, w1, h1, x2, y2, w2, h2)
+
+        if overlapping_area / w1 * h1 > OVERLAPPING_THRESHOLD:
+            valid_faces.pop()
+            break
+\end{minted}
+\noindent
+avendo precedentemente definito
+
+\begin{minted}{python}
+OVERLAPPING_THRESHOLD = 0.9
+\end{minted} 
+
+\noindent
+che, in seguito a diversi test, si è rivelato un valore valido per il rilevamento 
+dei rettangoli che si sovrapponevano, e
+
+\begin{minted}{python}
+def get_overlapping_area(x1, y1, w1, h1, x2, y2, w2, h2):
+    """
+    Calculates the overlapping area given the two rectangles respectively defined by (x1, y1, w1, h1)
+    and (x2, y2, w2, h2)
+    """
+\end{minted} 
+
