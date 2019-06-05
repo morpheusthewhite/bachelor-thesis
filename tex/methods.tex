@@ -21,7 +21,7 @@ in \ref{section:viola_jones}).
         \begin{center}
             \includegraphics[width=0.20\textwidth]{opencv.png}
         \end{center}
-        \caption{Il logo di OpenCV}
+        \caption{Il logo di OpenCV, una libreria molto utilizzata per la \textit{computer vision} }
         \label{fig:opencv}
     \end{small}
 \end{figure}
@@ -85,4 +85,125 @@ def get_overlapping_area(x1, y1, w1, h1, x2, y2, w2, h2):
     and (x2, y2, w2, h2)
     """
 \end{minted} 
+
+\section{Regressione sul flusso degli studenti}
+\label{section:methods_ml}
+
+\subsection{Struttura della rete}
+\label{section:methods_ml_structure}
+
+Per stimare il numero di studenti viene utilizzato un modello di rete neurale molto semplice:
+essa consiste in un layer di input, due layer nascosti, con funzione di 
+attivazione la ReLU \ref{eq:relu}, ed un layer di output.
+Per l'implementazione si utilizza Keras, una libreria che offre un interfaccia 
+immediata e completa per il machine learning in Python.
+
+\begin{minted}{python}
+# define base model
+def baseline_model(inputs=9):
+    # create model
+    model = Sequential()
+    model.add(Dense(inputs, input_dim=inputs, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(12, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(12, kernel_initializer='normal', activation='relu'))
+    model.add(Dense(1, kernel_initializer='normal'))
+
+    # Compile model
+    model.compile(loss='mean_squared_error', optimizer='adam', metrics=[r_square, rmse])
+
+    return model
+\end{minted} 
+
+Come funzione di loss il modello utilizzerà l'MSE (Mean Square Error, o errore quadratico medio) 
+definito come (essendo $e_j$ lo scostamento nella stima j-esima di n)\cite{Botchkarev2018}
+
+\begin{equation}
+    MSE = \frac{1}{n} \sum_{j=1}^{n} e_j^2
+    \label{eq:mse}
+\end{equation}
+
+e come metriche ulteriori il RMSE (Root Mean Square Error), che corrisponde alla radice quadrata 
+di \ref{eq:mse} e \textit{R squared}, calcolato come \cite{RePEc:pra:mprapa:84722}
+
+\begin{equation}
+    R^2 = 1 - \frac{SSE}{SST}
+    \label{eq:r2}
+\end{equation}
+\noindent
+con $SSE$ somma dei quadrati degli errori e $SST$ somma dei quadrati degli scostamenti dei valori 
+reali dalla media.
+
+Di particolare interesse è la prima metrica, in quanto risulta indicatrice del numero di studenti 
+di differenza tra la stima effettuata ed i dati analizzati.
+
+\begin{minted}{python}
+def rmse(y_true, y_pred):
+    from keras import backend
+    return backend.sqrt(backend.mean(backend.square(y_pred - y_true), axis=-1))
+
+def r_square(y_true, y_pred):
+    from keras import backend as K
+    SS_res = K.sum(K.square(y_true - y_pred))
+    SS_tot = K.sum(K.square(y_true - K.mean(y_true)))
+    return ( 1 - SS_res/(SS_tot + K.epsilon()) )
+\end{minted} 
+
+\subsection{Training} % (fold)
+\label{sub:methods_ml_training}
+
+Il dataset utilizzato per il training (generato artificialmente) consiste in una serie di entry del 
+tipo
+
+\begin{minted}{json}
+{"hour": 18, "students": 100, "day": "thursday", "subject": "CAL"}
+\end{minted} 
+
+(sono stati inseriti anche il numero di studenti poichè generare un dataset con delle label 
+associate a foto sarebbe stato molto dispendioso e non necessario, visto che l'implementazione
+scelta dell'applicazione permette sia di partire da foto con informazioni associate sia direttamente 
+da entry come quella appena mostrata, essendo la parte di face detection separata da quella di 
+machine learning).
+
+La vera fase di training quindi viene effettuata nella seguente funzione, definita per la classe 
+\lstinline{StudentsEstimator}, un wrapper per il modello di regressione e che effettua anche la fase
+di encoding dei dati
+
+\begin{minted}{python}
+def train(self, early_stopping=True):
+    # train model
+    callbacks = []
+
+    if early_stopping:
+        early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+        callbacks.append(early_stopping)
+
+    history = self.estimator.fit(self.X, self.Y, validation_split=VALIDATION_FRACTION, callbacks=callbacks)
+\end{minted} 
+\noindent
+con \lstinline{VALIDATION_FRACTION} precedentemente definita pari a $0.1$. 
+
+Se non specificato, viene effettuato l'\textit{early stopping}, cioè il training viene interrotto 
+nel momento in cui per un numero di epoche consecutive pari alla \lstinline{patience} la loss nei test 
+cresce anziché diminuire (questo procedimento viene solitamente aggiunto per evitare \textit{overfitting} 
+sui dati, che cioè la rete diventi un modello adatto a rappresentare ottimamente solo i dati di training
+e performi molto male sui restanti). 
+
+Gli score e le metriche precedentemente introdotti verranno poi estrapolati dalla \lstinline{history} 
+restituita da \lstinline{estimator.fit()}.
+
+A questo punto vengono effettuate una o più stime attraverso il modello costruito, dopo aver codificato i 
+dati in modo coerente rispetto al training
+
+\begin{minted}{python}
+def predict(self, prediction_data):
+    # encode data before prediction
+    dp = pandas.DataFrame(prediction_data)
+    X = self.transform_data(dp)
+
+    predictions_float = self.estimator.predict(X)
+\end{minted} 
+
+Si dispone quindi di entry identiche nella forma a quelle utilizzate per il training, con la 
+differenza che le prime sono ottenute attraverso delle stime. Si passa quindi all'ultima parte 
+dell'applicazione, incentrata sull'allocazione dei gruppi di studenti. 
 
