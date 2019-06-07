@@ -218,3 +218,361 @@ dell'applicazione, incentrata sull'allocazione dei gruppi di studenti.
     \end{small}
 \end{figure}
 
+\newpage
+
+\section{Allocazione degli studenti}
+\label{section:allocation}
+
+\subsection{Formulazione multiobiettivo}
+\label{section:allocation_formulation}
+
+Se rappresento con $S = \{s_1, \dots, s_n\}$ l'insieme degli $n$  gruppi di studenti in un certo giorno e ora e con 
+$R = \{r_1, \dots, r_m\}$ l'insieme
+delle $m$  aule disponibili, definite delle variabili decisionali $y_{ij}$ (che assumono valore 1 se il 
+gruppo di studenti $i$ è assegnato all'aula $j$, 0 altrimenti), allora le $n$  funzioni obiettivo 
+sono le seguenti 
+
+\begin{equation}
+    \max \bigg( \sum_{j = 1}^{m}\frac{s_i}{r_j} \cdot y_{ij} \bigg) \quad \forall i \in \{1, \dots, n\}
+    \label{eq:objs}
+\end{equation}
+
+Con vincoli
+
+\begin{itemize}
+    \item Gruppi di studenti sono assegnati ad aule con capienza maggiore uguale al loro numero
+
+    \begin{equation}
+        s_i \leq \sum_{j=1}^{m} y_{ij} \cdot r_j \quad \forall i \in \{1, \dots, n\}
+        \label{eq:constraint_capacity}
+    \end{equation}
+
+    \item Ogni aula è assegnata al massimo ad un gruppo di studenti
+    
+    \begin{equation}
+        \sum_{i=1}^{n} y_{ij} \leq 1 \quad \forall j \in \{1, \dots, m\}
+        \label{eq:constraint_rooms}
+    \end{equation}
+
+    \item Ogni gruppo di studenti è assegnato esattamente ad un'aula
+    
+    \begin{equation}
+        \sum_{j=1}^{m} y_{ij} = 1 \quad \forall i \in \{1, \dots, n\}
+        \label{eq:constraint_students}
+    \end{equation}
+    
+    \item Le variabili sono binarie
+    
+    \begin{equation}
+        y_{ij} \in \{0,1\} \quad \forall i \in \{1,\dots, n\}, \forall j \in \{1, \dots, m\}
+        \label{eq:_constraint_binary}
+    \end{equation}
+    
+\end{itemize}
+
+Le soluzioni efficienti di questo problema possono essere calcolate con il metodo delle 
+$\epsilon$-constraints (\ref{section:epsilon_constraints}).
+
+\subsection{Scelta della soluzione}
+\label{section:sol_choice}
+
+Delle diverse soluzioni efficienti interessa però selezionarne un sottoinsieme finito:
+si richiede infatti che nel caso di due ottimi di Pareto venga scelto quello che lascia 
+un numero di posti vuoti $v_i$ maggiore se $s_i$ è maggiore, i. e., dati ad esempio i seguenti gruppi di studenti e di aule
+
+\begin{flalign*}
+    S = \{s_1, s_2\}\\
+    R = \{r_1, r_2, r_3\} \\
+\end{flalign*}
+
+con $r_1 < s_1 < s_2 < r_2 < r_3$ allora la soluzione preferita sarà quella con $y_{12} = 1$, $y_{23}=1$ e le restanti variabili nulle.
+Si richiede cioè che, dati $p$ e $q$, $y_{ps}=1$ e $y_{qt}=1$, $s_p \leq s_q \implies r_s \leq r_t$.
+
+\subparagraph{Un esempio}
+
+Dato il seguente problema
+
+\begin{center}
+\begin{tabular}[c]{|c|c|c|}
+    \hline
+    \multirow{2}{*}{Studenti} & $\mathbf{s_1}$  & $\mathbf{s_2}$ \\
+    \cline{2-3}
+    & 36 & 38 \\
+    \hline
+\end{tabular}
+\quad \quad
+\begin{tabular}[c]{|c|c|c|c|c|}
+    \hline
+    \multirow{2}{*}{Aule} & $\mathbf{r_1}$ & $\mathbf{r_2}$ & $\mathbf{r_3}$ & $\mathbf{r_4}$ \\
+    \cline{2-5}
+    & 30 & 40 & 50 & 60 \\
+    \hline
+\end{tabular}
+\end{center}
+
+Tra i due ottimi di Pareto viene quindi preferita quella che associa $s_1$ a $r_2$ e $s_2$ a $r_3$.
+
+\subsection{Formulazione singolo obiettivo}
+
+Le $n$ funzioni obiettivo devono essere quindi trasformate in una sola per poter risolvere il problema:
+utilizzando il metodo dei pesi (Capitolo~\ref{section:weight_method}), attraverso un vettore di coefficienti,
+rilasciando la richiesta non necessaria che la somma delle componenti sia pari a 1
+(\cite{Marler2009}, pag. 854)
+
+\begin{equation*}
+    \mathbf{\lambda} = \begin{bmatrix}
+        \lambda_1 \\
+        \vdots \\
+        \lambda_n \\
+    \end{bmatrix}
+    \label{eq:}
+\end{equation*}
+ 
+Le funzioni obiettivo diventano
+
+\begin{equation}
+    \max \bigg( \sum_{i=1}^{n} \lambda_{i} \cdot \sum_{j = 1}^{m}\frac{s_i}{r_j} \cdot y_{ij}\bigg)
+    \label{eq:}
+\end{equation}
+
+\subsubsection{Scelta dei pesi}
+Una scelta immediata e triviale per i $\lambda_i$ è
+\begin{equation}
+    \lambda_i = \frac{1}{s_i}
+    \label{eq:}
+\end{equation}
+in modo che cioè la scelta sia pesata in base all'inverso del numero di studenti, 
+cosicché ad un numero inferiore di studenti corrisponda un peso maggiore nella
+funzione obiettivo finale. Contemporaneamente però esso annulla completamente
+la precedente richiesta di massimizzare la percentuale di posti utilizzati, 
+facendo dipendere la scelta esclusivamente dalle aule utilizzate.
+
+Considerando gli $s_i$ in ordine crescente, il valore dei pesi che sintetizza la richiesta 
+nel Capitolo~\ref{section:sol_choice} si verifica essere quindi
+
+\begin{equation}
+    \lambda_i = \prod_{k=1,\\ k\neq i}^{n} (s_k + \epsilon (i -1))
+    \label{eq:}
+\end{equation}
+
+\noindent
+con $\epsilon > 0$ piccolo a piacere.
+
+La funzione da massimizzare diventa quindi
+
+\begin{equation}
+    \max \bigg( \sum_{i=1}^{n} \prod_{k=1,\\ k\neq i}^{n} (s_k - \epsilon (i- 1)) \cdot \sum_{j = 1}^{m}\frac{s_i}{r_j} \cdot y_{ij}\bigg)
+    \label{eq:single_obj}
+\end{equation}
+
+\begin{proof}
+    Bisogna dimostrare che, dato il problema definito da (\ref{eq:single_obj})
+    la soluzione ottima rispetta la richiesta in Capitolo~\ref{section:sol_choice}.
+    
+    Si considerino i gruppi di studenti ordinati in modo crescente e, per 
+    semplificare la notazione, anche la capacità delle aule;
+    si consideri inoltre il caso in cui il problema sia ammissibile e $r_i < s_1, \dots, s_n \leq r_{i+1}$ ($r_i$ potrebbe 
+    anche non esistere): la richiesta non è restrittiva, in quanto la dimostrazione negli 
+    altri casi è analoga.
+
+    Sia $\bar{r}_i$ la capacità dell'aula associata nella soluzione 
+    ottima al gruppo di studenti $i$ e con $\tilde{r}_i$ la capacità associata in una 
+    qualunque soluzione ammissibile al gruppo di studenti $i$.
+
+    E' quindi necessario provare che 
+    
+    \begin{equation}
+        s_x \geq s_y \implies \bar{r}_x \geq \bar{r}_y    
+        \label{eq:}
+    \end{equation}
+    
+    Essendo soluzione ottima del problema, vale
+    
+    \begin{equation*}
+        \lambda_1 \frac{s_1}{\bar{r}_1} + \dots + \lambda_{n} \frac{s_{n}}{\bar{r}_{n}} \geq
+        \lambda_1 \frac{s_1}{\tilde{r}_1} + \dots + \lambda_{n} \frac{s_{n}}{\tilde{r}_{n}}
+        \label{eq:}
+    \end{equation*}
+    
+    \noindent
+    per ogni scelta di $\tilde{r}_i$ che risulti ammissibile per il problema; in particolare, 
+    si consideri quella in cui $\tilde{r}_i = \bar{r}_i \quad \forall i \in \{1, \dots, n\}, i \neq p, q$,
+    in cui cioè la scelta delle associazioni corrisponda sempre tranne per i gruppi di studenti 
+    $s_p$ e $s_q$.
+    
+    La disuguaglianza diventa quindi
+    
+    \begin{equation*}
+        \lambda_p \frac{s_p}{\bar{r}_p} + \lambda_{q} \frac{s_{q}}{\bar{r}_{q}} \geq
+        \lambda_1 \frac{s_p}{\tilde{r}_p} + \lambda_{q} \frac{s_{q}}{\tilde{r}_{q}}
+        \label{eq:}
+    \end{equation*}
+    
+    Si nota subito che per essere una soluzione efficiente diversa dall'ottimo deve valere 
+    $\tilde{r}_p = \bar{r}_q$ e $\tilde{r}_q = \bar{r}_p$  
+    
+    \begin{equation*}
+        \lambda_p \frac{s_p}{\bar{r}_p} + \lambda_{q} \frac{s_{q}}{\bar{r}_{q}} \geq
+        \lambda_1 \frac{s_p}{\bar{r}_q} + \lambda_{q} \frac{s_{q}}{\bar{r}_{p}}
+        \label{eq:}
+    \end{equation*}
+    \begin{equation*}
+        \lambda_p s_p \bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q}\bigg) \geq 
+        \lambda_q s_q \bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg)
+        \label{eq:proof}
+    \end{equation*}
+    \begin{equation*}
+        \frac{\lambda_p}{\lambda_q}  \bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q}\bigg) \geq 
+        \frac{s_q}{s_p} \bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg)
+        \label{eq:proof}
+    \end{equation*}
+    
+    Adesso, supponendo PA che $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg) \leq 0$
+    
+    \begin{equation}
+        \frac{\lambda_p}{\lambda_q} \leq 
+        \frac{s_q}{s_p}
+        \label{eq:proof_dis}
+    \end{equation}
+    
+    Con (dato $s_p \leq s_q$) 
+    
+    \begin{equation*}
+        \frac{\lambda_p}{\lambda_q} = \frac{(s_1 - \epsilon(p-1))\dots(s_{p-1} - \epsilon(p-1))(s_{p+1} - \epsilon(p-1))
+        \dots(s_n - \epsilon(p-1))}
+        {(s_1 - \epsilon(q-1))\dots(s_{q-1} - \epsilon(q-1))(s_{q+1} - \epsilon(q-1))\dots(s_n - \epsilon(q-1))}
+        \label{eq:}
+    \end{equation*}
+    \begin{equation*}
+        \geq \frac{(s_q - \epsilon(p-1))}
+        {(s_p - \epsilon(q-1))}
+        \label{eq:}
+    \end{equation*}
+    
+    Quindi (\ref{eq:proof_dis}) diventa
+    
+    \begin{equation*}
+        \frac{(s_q - \epsilon(p-1))}
+        {(s_p - \epsilon(q-1))} \leq 
+        \frac{s_q}{s_p}
+        \label{eq:proof}
+    \end{equation*}
+    \begin{equation*}
+        \frac{(s_q - \epsilon(p-1))}
+        {(s_p - \epsilon(q-1))}
+        \cdot
+        \frac{(s_q - \epsilon(q-1))}
+        {(s_q - \epsilon(q-1))} \leq 
+        \frac{s_q}{s_p}
+        \label{eq:proof}
+    \end{equation*}
+    \begin{equation*}
+        \frac{(s_q - \epsilon(p-1))}
+        {(s_q - \epsilon(q-1))}
+        \cdot
+        \frac{(s_q - \epsilon(q-1))}
+        {(s_p - \epsilon(q-1))} \leq 
+        \frac{s_q}{s_p}
+        \label{eq:proof}
+    \end{equation*}
+    
+    Si vede facilmente che $
+    \frac{(s_q - \epsilon(p-1))}
+    {(s_q - \epsilon(q-1))} \geq 1$ (poiché $p < q$, 
+    essendo ordinati in modo crescente), quindi
+    
+    \begin{equation*}
+        \frac{(s_q - \epsilon(q-1))}
+        {(s_p - \epsilon(q-1))} \leq 
+        \frac{s_q}{s_p}
+        \label{eq:proof}
+    \end{equation*}
+    
+    \noindent
+    che risulta falsa per $s_q \geq s_p$. 
+    
+    Quindi deve essere $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg) \geq 0$, cioè
+    
+    \begin{equation}
+        \frac{1}{\bar{r}_p} \geq \frac{1}{\bar{r}_q} \implies \bar{r}_q \geq \bar{r}_p
+        \label{eq:}
+    \end{equation}
+    
+\end{proof} 
+    
+\subsection{Implementazione}
+\label{section:allocation_implementation}
+
+Per la risoluzione del problema formulato verrà utilizzata la libreria \lstinline{cplex}  di Python la quale 
+offre la possibilità di utilizzare da codice esterno le funzionalità di IBM CPLEX, un software 
+incentrato sulla risoluzione di problemi di programmazione matematica.
+
+Dopo aver creato ed inizializzato il modello
+
+\begin{minted}{python}
+# create CPLEX object
+cplex_model = cplex.Cplex()
+cplex_model.set_log_stream(None)
+cplex_model.set_warning_stream(None)
+cplex_model.set_results_stream(None)
+\end{minted} 
+
+si passa alla definizione della matrice delle variabili decisionali e alla funzione di costo
+
+\begin{minted}{python}
+# create the vector of the decision variables
+y_vars_name = ["y" + str(i) + str(j) for i in range(n_students) for j in range(n_rooms)]
+cplex_model.variables.add(names=y_vars_name, types=[cplex_model.variables.type.binary] * n_students * n_rooms, obj=cost_vector)
+
+# we want to maximize
+cplex_model.objective.set_sense(cplex_model.objective.sense.maximize)
+\end{minted} 
+
+ed all'aggiunta dei vincoli, quello sull'assegnazione degli studenti 
+in aule con capacità maggiore (\ref{eq:constraint_capacity}),
+
+\begin{minted}{python}
+cplex_model.linear_constraints.add(
+    lin_expr=[cplex.SparsePair(ind=["y" + str(i) + str(j)], val=[lessons_students[i]])
+                for i in range(n_students) for j in range(n_rooms)],
+    senses=["L"] * n_rooms * n_students,
+    rhs=[rooms_seats[j] for i in range(n_students) for j in range(n_rooms)],
+    range_values=[0] * n_rooms * n_students)
+\end{minted} 
+
+quello sull'unicità dell'assegnazione delle aule (\ref{eq:constraint_rooms})
+
+\begin{minted}{python}
+cplex_model.linear_constraints.add(
+    lin_expr=[cplex.SparsePair(ind=["y" + str(i) + str(j) for i in range(n_students)], val=[1] * n_students)
+                for j in range(n_rooms)],
+    senses=["L"] * n_rooms,
+    rhs=[1] * n_rooms,
+    range_values=[0] * n_rooms)
+\end{minted} 
+
+e quello sull'unicità dell'assegnazione degli studenti (\ref{eq:constraint_students})
+
+\begin{minted}{python}
+cplex_model.linear_constraints.add(
+    lin_expr=[cplex.SparsePair(ind=["y" + str(i) + str(j) for j in range(n_rooms)], val=[1] * n_rooms)
+                for i in range(n_students)],
+    senses=["E"] * n_students,
+    rhs=[1] * n_students,
+    range_values=[0] * n_students)
+\end{minted} 
+
+Viene quindi risolto il problema
+
+\begin{minted}{python}
+try:
+    cplex_model.solve()
+except cplex.CplexError as exc:
+    print(exc)
+    return
+
+# get decision variables values
+solution = cplex_model.solution
+var_values = solution.get_values(0, cplex_model.variables.get_num() - 1)
+\end{minted} 
+
