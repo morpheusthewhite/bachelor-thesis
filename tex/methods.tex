@@ -148,6 +148,19 @@ def r_square(y_true, y_pred):
     return ( 1 - SS_res/(SS_tot + K.epsilon()) )
 \end{minted} 
 
+Il regressore viene quindi creato come specificato in \lstinline{baseline_model}
+
+\begin{minted}{python}
+self.estimator = KerasRegressor(build_fn=baseline_model, inputs=len(self.X.columns), epochs=N_EPOCHS, batch_size=BATCH_SIZE, verbose=1)
+\end{minted}
+
+avendo precedentemente definito
+
+\begin{minted}{python}
+N_EPOCHS = 100
+BATCH_SIZE = 5
+\end{minted}
+
 \subsection{Training} % (fold)
 \label{sub:methods_ml_training}
 
@@ -213,7 +226,7 @@ dell'applicazione, incentrata sull'allocazione dei gruppi di studenti.
             \includegraphics[width=0.50\textwidth]{keras.png}
         \end{center}
         \caption{Keras è una API ad alto livello per il machine learning in Python
-            e che si può basare su TensorFlow, CNTK, e Theano}
+            e che si può basare su TensorFlow, CNTK e Theano}
         \label{fig:}
     \end{small}
 \end{figure}
@@ -517,6 +530,7 @@ cplex_model.set_warning_stream(None)
 cplex_model.set_results_stream(None)
 \end{minted} 
 
+\noindent
 si passa alla definizione della matrice delle variabili decisionali e alla funzione di costo
 
 \begin{minted}{python}
@@ -528,6 +542,7 @@ cplex_model.variables.add(names=y_vars_name, types=[cplex_model.variables.type.b
 cplex_model.objective.set_sense(cplex_model.objective.sense.maximize)
 \end{minted} 
 
+\noindent
 ed all'aggiunta dei vincoli, quello sull'assegnazione degli studenti 
 in aule con capacità maggiore (\ref{eq:constraint_capacity}),
 
@@ -540,6 +555,7 @@ cplex_model.linear_constraints.add(
     range_values=[0] * n_rooms * n_students)
 \end{minted} 
 
+\noindent
 quello sull'unicità dell'assegnazione delle aule (\ref{eq:constraint_rooms})
 
 \begin{minted}{python}
@@ -551,6 +567,7 @@ cplex_model.linear_constraints.add(
     range_values=[0] * n_rooms)
 \end{minted} 
 
+\noindent
 e quello sull'unicità dell'assegnazione degli studenti (\ref{eq:constraint_students})
 
 \begin{minted}{python}
