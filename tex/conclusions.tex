@@ -1,0 +1,20 @@
+\chapter{Conclusioni}
+
+L'obiettivo iniziale era quello di sviluppare un'applicazione per l'osservazione, previsione e 
+allocazione degli studenti in ambiente accademico: un sistema che riuscisse contemporaneamente a 
+monitorare l'afflusso nelle varie lezioni (realizzato attraverso modelli di \textit{face detection} 
+in OpenCV), a stimarne l'andamento (attraverso una regressione con una rete neurale in Keras) e 
+la distribuzione ottimale (compiuta con la risoluzione di un problema di programmazione matematica
+risolto con CPLEX).
+
+\smallskip
+
+Le tecniche utilizzate, che si sono rivelate adatte a questo scopo, offrono però margini di miglioramento:
+l'aggiunta di modelli trainati appositamente per la \textit{face detection} in questo ambito migliorerebbe 
+ulteriormente la percentuale di volti individuati, arrivando a perfezionare in questo modo le stime,
+chiaramente influenzate anche da questi errori; incrementare la dimensione della rete neurale (soprattutto se si 
+prendono in considerazione dataset con enorme varietà di entry) risulta quasi necessario, così come 
+l'inserimento di ulteriori parametri utilizzati per la stima (come ad esempio il professore che sostiene 
+la lezione), che, mancando, limiterebbero la correttezza delle previsioni, semplificando troppo
+un fenomeno comunque complesso.
+
