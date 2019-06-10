@@ -41,12 +41,23 @@ massimizzare il valore di una certa funzione matematica che rappresenta il probl
 Il documento è strutturato in 
 
 \begin{itemize}
-    \item \textbf{State of the Art}, in cui vengono accennati i concetti teorici utilizzati per la risoluzione 
-        del problema; vengono analizzati articoli e fonti che hanno affrontato le stesse problematiche. 
-    \item \textbf{Metodo}, nel quale sono approfondite le metodologie usate per la realizzazione 
-        dell'applicazione e vengono trattate ulteriori questioni sorte nell'implementazione.
-    \item \textbf{Risultati}, che illustra gli esiti e l'efficienza della realizzazione scelta.
-    \item \textbf{Conclusioni}, contenente le osservazioni finali dedotte dai risultati ottenuti.
+    \item \textbf{\nameref{section:state_of_the_art}}, in cui vengono inizialmente accennati i concetti teorici utilizzati per la risoluzione 
+        del problema su argomenti quali
+        \begin{enumerate}
+            \item \textbf{\nameref{section:face_detection}}
+            \item \textbf{\nameref{section:regression_ml}} 
+            \item \textbf{\nameref{section:lin_programming}}; 
+        \end{enumerate}
+
+        vengono quindi analizzati articoli e pubblicazioni che hanno affrontato le stesse problematiche 
+        (\textbf{\nameref{section:past_works}}).
+        
+    \item \textbf{\nameref{section:methods}}, nel quale sono approfondite le metodologie usate per la realizzazione 
+        dell'applicazione (capitoli \ref{section:methods_face_detection}, \ref{section:methods_ml} e \ref{section:methods_allocation})
+    \item \textbf{\nameref{section:results}}, che illustra gli esiti e l'efficienza ed un'analisi della realizzazione scelta (capitolo 
+        \ref{section:results})
+    \item \textbf{\nameref{section:conclusion}}, contenente le osservazioni finali dedotte insieme all'illustrazione di possibili 
+        miglioramenti.
 \end{itemize}
 
 \section{Codice sorgente}
@@ -55,7 +66,7 @@ Il codice completo di questa applicazione è accessibile su GitHub al seguente
 indirizzo 
 
 \begin{center}
-    \url{https://github.com/morpheusthewhite/celephais/}; 
+    \url{https://github.com/morpheusthewhite/celephais}; 
 \end{center}
 
 \noindent
