@@ -117,5 +117,24 @@ I risultati ottenuti sono considerabili molto positivi:
         evidenziano, in particolare il RMSE, come l'errore nelle stime effettuate sia circa 
         di 5 studenti, circa il 5\% del numero medio di studenti del dataset
     \item In \textbf{\nameref{section:results_mp}} gli assegnamenti effettuati dall'applicazione rispettano
-        completamente le richieste precedentemente specificate.
-\end{itemize}
+        completamente le richieste precedentemente specificate: altre soluzioni ammissibili per il problema,
+        come ad esempio 
+
+        \begin{table}[h]
+            \begin{small}
+                \begin{center}
+                    \begin{tabular}[c]{c|c|c|c|c}
+                        Giorno & Ora & Disciplina & Stima studenti & Aula assegnata \\
+                        \hline
+                        sunday & 15 & SC2 & 86 & r06 \\
+                        sunday & 15 & PSW & 90 & r07 \\
+                        sunday & 15 & PFP & 115 & r09 \\
+                        monday & 10 & SC2 & 84 & r06
+                    \end{tabular}
+                \end{center}
+            \end{small}
+        \end{table}
+
+        risultano avere un valore della funzione obiettivo inferiore.
+
+    \end{itemize}

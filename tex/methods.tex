@@ -349,19 +349,9 @@ Le funzioni obiettivo diventano
 \end{equation}
 
 \subsubsection{Scelta dei pesi}
-Una scelta immediata e triviale per i $\lambda_i$ è
-\begin{equation}
-    \lambda_i = \frac{1}{s_i}
-    \label{eq:}
-\end{equation}
-in modo che cioè la scelta sia pesata in base all'inverso del numero di studenti, 
-cosicché ad un numero inferiore di studenti corrisponda un peso maggiore nella
-funzione obiettivo finale. Contemporaneamente però esso annulla completamente
-la precedente richiesta di massimizzare la percentuale di posti utilizzati, 
-facendo dipendere la scelta esclusivamente dalle aule utilizzate.
 
 Considerando gli $s_i$ in ordine crescente, il valore dei pesi che sintetizza la richiesta 
-nel Capitolo~\ref{section:sol_choice} si verifica essere quindi
+nel Capitolo~\ref{section:sol_choice} si verifica essere
 
 \begin{equation}
     \lambda_i = \prod_{k=1,\\ k\neq i}^{n} (s_k + \epsilon (i -1))
@@ -395,9 +385,12 @@ La funzione da massimizzare diventa quindi
     E' quindi necessario provare che 
     
     \begin{equation}
-        s_x \geq s_y \implies \bar{r}_x \geq \bar{r}_y    
+        s_q \geq s_p \implies \bar{r}_q \geq \bar{r}_p    
         \label{eq:}
     \end{equation}
+
+    \noindent
+    (essendo i gruppi di studenti ordinati in senso crescente risulterà inoltre $p \leq q$)
     
     Essendo soluzione ottima del problema, vale
     
@@ -421,8 +414,7 @@ La funzione da massimizzare diventa quindi
         \label{eq:}
     \end{equation*}
     
-    Si nota subito che per essere una soluzione efficiente diversa dall'ottimo deve valere 
-    $\tilde{r}_p = \bar{r}_q$ e $\tilde{r}_q = \bar{r}_p$  
+    Si supponga inoltre il caso (ammissibile) in cui $\tilde{r}_p = \bar{r}_q$ e $\tilde{r}_q = \bar{r}_p$  
     
     \begin{equation*}
         \lambda_p \frac{s_p}{\bar{r}_p} + \lambda_{q} \frac{s_{q}}{\bar{r}_{q}} \geq
@@ -440,7 +432,7 @@ La funzione da massimizzare diventa quindi
         \label{eq:proof}
     \end{equation*}
     
-    Adesso, supponendo PA che $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg) \leq 0$
+    Adesso, supponendo PA che $\bar{r}_p \geq \bar{r}_q$ e quindi $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg) \leq 0$
     
     \begin{equation}
         \frac{\lambda_p}{\lambda_q} \leq 
@@ -461,6 +453,9 @@ La funzione da massimizzare diventa quindi
         {(s_p - \epsilon(q-1))}
         \label{eq:}
     \end{equation*}
+    
+    \noindent
+    essendo i fattori $\frac{(s_i - \epsilon(p-i))}{(s_{i} - \epsilon(q-i))} \geq 1$ (poichè $p \leq q$).
     
     Quindi (\ref{eq:proof_dis}) diventa
     
@@ -489,10 +484,9 @@ La funzione da massimizzare diventa quindi
         \label{eq:proof}
     \end{equation*}
     
-    Si vede facilmente che $
+    Si vede facilmente che anche $
     \frac{(s_q - \epsilon(p-1))}
-    {(s_q - \epsilon(q-1))} \geq 1$ (poiché $p < q$, 
-    essendo ordinati in modo crescente), quindi
+    {(s_q - \epsilon(q-1))} \geq 1$, quindi
     
     \begin{equation*}
         \frac{(s_q - \epsilon(q-1))}
