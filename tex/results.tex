@@ -35,29 +35,84 @@ inquadrato solo in parte.
 \section{Rendimento della rete}
 \label{section:results_ml}
 
+Il dataset utilizzato per il training consiste in una serie di entry del 
+tipo
+
+\begin{table}[h]
+    \begin{small}
+        \label{tab:dataset_entry}
+        \begin{center}
+            \begin{tabular}[c]{c|c|c|c}
+                \hline
+                \textbf{Giorno} & \textbf{Orario} & \textbf{Materia} & \textbf{Studenti} \\
+                \hline
+            \end{tabular}
+        \end{center}
+    \end{small}
+\end{table}
+
+\noindent
+(ogni entry contiene anche il numero di studenti, trascurando per il momento la 
+fase di \textit{face detection}). Esso è generato artificialmente attraverso la generazioni 
+di numeri randomici che sono legati tra di loro attraverso dei vincoli matematici che vogliono 
+simulare l'andamento reale degli studenti (in modo da avere ad esempio un numero maggiore di 
+studenti nelle ore centrali del giorno)
+
+\begin{minted}{python}
+dataset = []
+
+# create randomly a dataset
+for i in range(DATASET_SIZE):
+    subject_index = int(random.random() * len(SUBJECTS))
+    hour = int(random.random() * LESSON_HOURS + LESSON_STARTING_HOUR)
+    day_index = int(random.random() * len(DAYS))
+
+    # associate to the random choices a number of students
+    students = subject_index * 5 - (hour - hour_central)**2 + 100 + day_index % 3 + int(random.random()*16 - 8)
+\end{minted}
+
 Il dataset utilizzato contiene 1000 entry, ed il training, a causa dell'
-\textit{early stopping} si ferma intorno alla 50 esima iterazione con i seguenti 
-score sul set di \textit{test}
+\textit{early stopping} si ferma intorno alla 50 esima iterazione con gli 
+score sui set di \textit{training} e \textit{test} rispettivamente mostrate in 
+Figure~\ref{fig:scores_training} e Figure~\ref{fig:scores_test}.
 
 \smallskip
 
 \begin{figure}[h]
     \centering
     
+    % \begin{subfigure}[b]{0.45\linewidth}
+    %     \includegraphics[width=\linewidth]{plots/rmse.png}
+    %     \caption{RMSE}
+    % \end{subfigure}
+    % \begin{subfigure}[b]{0.45\linewidth}
+    %     \includegraphics[width=\linewidth]{plots/r_square.png}
+    %     \caption{$r^2$}
+    % \end{subfigure}
+    \begin{subfigure}[b]{0.6\linewidth}
+        \includegraphics[width=\linewidth]{plots/loss.png}
+    \end{subfigure}
+    \caption{La loss (MSE) sul set di training}
+    \label{fig:scores_training}
+\end{figure}
+
+\begin{figure}
+    \centering
+    
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{plots/rmse.png}
+        \includegraphics[width=\linewidth]{plots/val_rmse.png}
         \caption{RMSE}
     \end{subfigure}
     \begin{subfigure}[b]{0.45\linewidth}
-        \includegraphics[width=\linewidth]{plots/r_square.png}
+        \includegraphics[width=\linewidth]{plots/val_r_square.png}
         \caption{$r^2$}
     \end{subfigure}
     \begin{subfigure}[b]{0.9\linewidth}
-        \includegraphics[width=\linewidth]{plots/loss.png}
+        \includegraphics[width=\linewidth]{plots/val_loss.png}
         \caption{MSE}
     \end{subfigure}
-    \caption{Gli score della rete}
-    \label{fig:example_opencv}
+    \caption{Gli score della rete sul set di test}
+    \label{fig:scores_test}
 \end{figure}
 
 \newpage
@@ -105,6 +160,8 @@ i problemi proposti vengono risolti con i seguenti assegnamenti
         \end{center}
     \end{small}
 \end{table}
+
+\newpage
 
 \section{Analisi dei risultati}
 

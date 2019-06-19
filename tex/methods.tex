@@ -165,19 +165,6 @@ BATCH_SIZE = 5
 \subsection{Training} % (fold)
 \label{sub:methods_ml_training}
 
-Il dataset utilizzato per il training (generato artificialmente) consiste in una serie di entry del 
-tipo
-
-\begin{minted}{json}
-{"hour": 18, "students": 100, "day": "thursday", "subject": "CAL"}
-\end{minted} 
-
-(sono stati inseriti anche il numero di studenti poichè generare un dataset con delle label 
-associate a foto sarebbe stato molto dispendioso e non necessario, visto che l'implementazione
-scelta dell'applicazione permette sia di partire da foto con informazioni associate sia direttamente 
-da entry come quella appena mostrata, essendo la parte di face detection separata da quella di 
-machine learning).
-
 La vera fase di training quindi viene effettuata nella seguente funzione, definita per la classe 
 \lstinline{StudentsEstimator}, un wrapper per il modello di regressione e che effettua anche la fase
 di encoding dei dati
