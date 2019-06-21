@@ -28,7 +28,7 @@ in \ref{section:viola_jones}).
 \end{figure}
 
 Tra questi sono stati scelti un modello per il riconoscimento dei volti visti frontalmente ed 
-uno per il riconoscimento di quelli visti di profilo, rispettivamente il \lstinline{haarcascade_frontalface_default.xml} 
+uno per il riconoscimento di quelli visti di profilo, rispettivamente \lstinline{haarcascade_frontalface_default.xml} 
 e \lstinline{haarcascade_profileface.xml}.
 
 \begin{minted}{python}
@@ -36,7 +36,7 @@ face_cascade_frontal = cv.CascadeClassifier(os.path.join(CLASSIFIERS_FOLDER, CLA
 face_cascade_profile = cv.CascadeClassifier(os.path.join(CLASSIFIERS_FOLDER, CLASSIFIER_FILENAME_PROFILE))
 \end{minted}
 
-Le facce riconosciute sono uguali all'unione di quelle riconosciute dai singoli classificatori
+Le facce riconosciute sono uguali all'unione degli insiemi riconosciuti dai singoli classificatori
 
 \begin{minted}{python}
 # detect faces
@@ -49,7 +49,7 @@ faces = list(faces_profile) + list(faces_frontal)
 
 Per evitare che delle facce, riconosciute da entrambi i modelli, siano contate più di una volta, è stato poi
 inserito un ulteriore controllo con una soglia sull'area di overlapping dei rettangoli che contengono i visi:
-in questo modo se l'area in comune tra due di essi rapportata all'area di uno dei due è maggiore di una certa 
+in questo modo se l'area in comune (rapportata all'area dei quadrilateri) è maggiore di una certa 
 soglia, uno dei due è scartato.
 
 \begin{minted}{python}
@@ -155,6 +155,7 @@ Il regressore viene quindi creato come specificato in \lstinline{baseline_model}
 self.estimator = KerasRegressor(build_fn=baseline_model, inputs=len(self.X.columns), epochs=N_EPOCHS, batch_size=BATCH_SIZE, verbose=1)
 \end{minted}
 
+\noindent
 avendo precedentemente definito
 
 \begin{minted}{python}
@@ -204,7 +205,7 @@ def predict(self, prediction_data):
     predictions_float = self.estimator.predict(X)
 \end{minted} 
 
-Si dispone quindi di entry identiche nella forma a quelle utilizzate per il training, con la 
+Si dispone quindi di entry identiche (nella forma) a quelle utilizzate per il training, con la 
 differenza che le prime sono ottenute attraverso delle stime. Si passa quindi all'ultima parte 
 dell'applicazione, incentrata sull'allocazione dei gruppi di studenti. 
 
@@ -311,7 +312,7 @@ Dato il seguente problema
 \end{tabular}
 \end{center}
 
-Tra i due ottimi di Pareto viene quindi preferita quella che associa $s_1$ a $r_2$ e $s_2$ a $r_3$.
+Tra gli ottimi di Pareto viene quindi preferita quella che associa $s_1$ a $r_2$ e $s_2$ a $r_3$.
 
 \subsection{Formulazione singolo obiettivo}
 
@@ -342,7 +343,7 @@ Considerando gli $s_i$ in ordine crescente, il valore dei pesi che sintetizza la
 nel Capitolo~\ref{section:sol_choice} si verifica essere
 
 \begin{equation}
-    \lambda_i = \prod_{k=1,\\ k\neq i}^{n} (s_k + \epsilon (i -1))
+    \lambda_i = \prod_{k=1,\\ k\neq i}^{n} (s_k - \epsilon (i -1))
     \label{eq:}
 \end{equation}
 
@@ -389,7 +390,7 @@ La funzione da massimizzare diventa quindi
     \end{equation*}
     
     \noindent
-    per ogni scelta di $\tilde{r}_i$ che risulti ammissibile per il problema; in particolare, 
+    per ogni scelta delle $\tilde{r}_i$ che risulti ammissibile per il problema; in particolare, 
     si consideri quella in cui $\tilde{r}_i = \bar{r}_i \quad \forall i \in \{1, \dots, n\}, i \neq p, q$,
     in cui cioè la scelta delle associazioni corrisponda sempre tranne per i gruppi di studenti 
     $s_p$ e $s_q$.
@@ -398,7 +399,7 @@ La funzione da massimizzare diventa quindi
     
     \begin{equation*}
         \lambda_p \frac{s_p}{\bar{r}_p} + \lambda_{q} \frac{s_{q}}{\bar{r}_{q}} \geq
-        \lambda_1 \frac{s_p}{\tilde{r}_p} + \lambda_{q} \frac{s_{q}}{\tilde{r}_{q}}
+        \lambda_p \frac{s_p}{\tilde{r}_p} + \lambda_{q} \frac{s_{q}}{\tilde{r}_{q}}
         \label{eq:}
     \end{equation*}
     
@@ -406,7 +407,7 @@ La funzione da massimizzare diventa quindi
     
     \begin{equation*}
         \lambda_p \frac{s_p}{\bar{r}_p} + \lambda_{q} \frac{s_{q}}{\bar{r}_{q}} \geq
-        \lambda_1 \frac{s_p}{\bar{r}_q} + \lambda_{q} \frac{s_{q}}{\bar{r}_{p}}
+        \lambda_p \frac{s_p}{\bar{r}_q} + \lambda_{q} \frac{s_{q}}{\bar{r}_{p}}
         \label{eq:}
     \end{equation*}
     \begin{equation*}
@@ -420,7 +421,8 @@ La funzione da massimizzare diventa quindi
         \label{eq:proof}
     \end{equation*}
     
-    Adesso, supponendo PA che $\bar{r}_p \geq \bar{r}_q$ e quindi $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg) \leq 0$
+    Adesso, supponendo PA che $\bar{r}_p \geq \bar{r}_q$ e quindi $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg) \leq 0$,
+    dividendo ambo i membri per $\bigg( \frac{1}{\bar{r}_p} - \frac{1}{\bar{r}_q} \bigg)$, la disuguaglianza si trasforma in
     
     \begin{equation}
         \frac{\lambda_p}{\lambda_q} \leq 
@@ -428,7 +430,7 @@ La funzione da massimizzare diventa quindi
         \label{eq:proof_dis}
     \end{equation}
     
-    Con (dato $s_p \leq s_q$) 
+    Con (essendo $p \leq q$), per la definizione dei pesi
     
     \begin{equation*}
         \frac{\lambda_p}{\lambda_q} = \frac{(s_1 - \epsilon(p-1))\dots(s_{p-1} - \epsilon(p-1))(s_{p+1} - \epsilon(p-1))
@@ -443,9 +445,8 @@ La funzione da massimizzare diventa quindi
     \end{equation*}
     
     \noindent
-    essendo i fattori $\frac{(s_i - \epsilon(p-i))}{(s_{i} - \epsilon(q-i))} \geq 1$ (poichè $p \leq q$).
-    
-    Quindi (\ref{eq:proof_dis}) diventa
+    (risultando i fattori $\frac{(s_i - \epsilon(p-i))}{(s_{i} - \epsilon(q-i))} \geq 1$) e
+    \ref{eq:proof_dis} diventa
     
     \begin{equation*}
         \frac{(s_q - \epsilon(p-1))}

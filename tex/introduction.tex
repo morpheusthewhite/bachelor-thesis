@@ -4,24 +4,24 @@
 \section{Il problema}
 \label{section:problem_section}
 
-In ambito universitario è problematica molto comune quella di cercare di assegnare aule a 
+In ambito universitario è problematica molto comune quella di dover assegnare aule a 
 gruppi di studenti in modo tale da rispettare le richieste in numero di posti
-di ciascuno di essi senza nemmeno concretamente conoscere il numero di allievi che frequenteranno 
+di ciascuno di essi; questo senza nemmeno concretamente conoscere il numero di allievi che frequenteranno 
 realmente il corso in questione, dovendo l'istituto assegnarle in anticipo rispetto all'inizio
 delle lezioni.
 
 Si pone quindi l'ulteriore problema di facilitare la raccolta di dati che permetta di effettuare 
-delle stime più accurate, quindi di registrare in modo automatico la partecipazione degli universitari
-a ciascuna lezione e quindi inferire attraverso di essi queste stime.
+delle stime più accurate, cioè di registrare in modo automatico la partecipazione degli universitari
+a ciascuna lezione per inferire queste stime.
 
 \medskip
 
 Quest'applicazione si pone l'obiettivo di risolvere esattamente questa problematica (il funzionamento è 
-illustrato in \ref{fig:app_flow}):
-a partire da foto (che si intende essere di aule) riconosce il numero di volti e quindi di studenti in essa 
-presenti. Questa informazione, associata ad informazioni riguardanti la lezione in questione, viene fornita 
-insieme a quest'ultime ad uno stimatore che, in base ai dati ricevuti cerca di costruire un modello matematico 
-capace di stimare il flusso di allievi in nuove e richieste situazioni: delle stime che verranno impiegate 
+illustrato in \ref{fig:app_flow});
+a partire da foto (che si intende essere di aule) viene individuato il numero di volti e quindi di studenti in essa 
+presenti: questo, associato ad ulteriori informazioni riguardanti la lezione in questione, viene fornito 
+ad uno stimatore che, in base ai dati raccolti, cerca di costruire un modello matematico 
+capace di prevedere il flusso di allievi nelle nuove situazioni richieste. Le stime verranno allora impiegate 
 per distribuire ciascun gruppo nelle diverse aule con data capacità in modo ottimale, cercando cioè di 
 massimizzare il valore di una certa funzione matematica che rappresenta il problema di allocazione. 
 

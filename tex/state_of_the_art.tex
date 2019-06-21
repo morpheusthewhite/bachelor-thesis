@@ -120,8 +120,8 @@ delle funzioni che mappano un'osservazione (in questo caso un insieme di pixel) 
 in questo caso \cite{Wang2014}
 $f:$\Rset$^d\rightarrow \{-1, 1\}$.
 
-Attraverso un Ada Boosting questi singoli ed imprecisi classificatori vengono combinati tra di loro
-per ottenere un classificatore "forte" che risulta essere molto più accurato \cite{Schapire2013} dei singoli.
+Questi singoli ed imprecisi classificatori vengono allora combinati tra di loro
+per ottenere un classificatore "forte" che risulta essere molto più accurato \cite{Schapire2013} dei singoli (Ada Boosting).
 
 Dato un esempio da classificare $x$, l'esito della classificazione "forte" è pari a 
 
@@ -169,7 +169,7 @@ indipendente $X$ ed una variabile dipendente, $Y$, attraverso un'equazione del t
 \end{equation}
 
 La regressione riesce quindi a quantificare quanto la variazione di una variabile è dipendente 
-dalla variazione di un'altra; quello che invece la non è capace di dimostrare è la casualità, 
+dalla variazione di un'altra; quello che invece la non è capace di dimostrare è la causalità, 
 la quale è dimostrata solo analiticamente \cite{campbell2008introduction}.
 
 \begin{figure}[bh]
@@ -346,7 +346,7 @@ $\mathbf{\theta}(x) \leq \mathbf{\theta}(\bar{x})$ (nel caso di minimo) e
 $x \neq \bar{x}$ \cite{walsh1985introduction}.
 
 L'insieme di queste soluzioni viene solitamente definito \textbf{frontiera di Pareto}, 
-ed essa è graficamente visibile se si rappresenta l'insieme dei valori ammissibili nello 
+ed essa è graficamente evidente se si rappresenta l'insieme dei valori ammissibili nello 
 spazio degli obiettivi Y, cioè l'insieme dei valori assunti da tutte $x \in X$ 
 (le $x$ ammissibili).
 
@@ -446,7 +446,7 @@ Il problema è quindi riformulato nella forma (per $x \in$ \Zset$^n$)
     \label{eq:}
 \end{equation*}
 
-A differenza del metodo dei pesi, riesce a generare tutte le soluzioni efficienti.
+A differenza del metodo dei pesi, al variare delle $\epsilon_i$, riesce a generare tutte le soluzioni efficienti.
 
 \newpage
 
