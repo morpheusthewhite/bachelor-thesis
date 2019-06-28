@@ -76,7 +76,7 @@
 \definecolor{red2}{RGB}{221,0,0}
 \definecolor{verylightgray}{RGB}{216,216,216}
 
-\RequirePackage{lstlinebgrd}
+% \RequirePackage{lstlinebgrd}
 % Except for green and purple, the other colors are pretty good in standard
 % hue
 \lstset{%
@@ -87,7 +87,7 @@
     keywordstyle={[2]\color{purple2}}, % built-ins
     stringstyle=\color{green2},%
     commentstyle=\color{red},%
-    linebackgroundcolor=\ifodd\value{lstnumber}\color{verylightgray}\else\color{white}\fi,
+    % linebackgroundcolor=\ifodd\value{lstnumber}\color{verylightgray}\else\color{white}\fi,
     upquote=true, % requires textcomp
     extendedchars=true,
     literate={á}{{\'a}}1 {ã}{{\~a}}1 {é}{{\'e}}1 {ò}{\`{o}}1 {à}{\`{a}}1 {è}{\`{e}}1 {ù}{\'{u}}1,
