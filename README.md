@@ -1,7 +1,7 @@
 # Bachelor thesis
 
 This repository contains the LaTeX code of my bachelor thesis at Sapienza University of Rome.
-Written in Italia, it refers to [Celephais](https://github.com/morpheusthewhite/celephais/), an application that detects the number of students present in the given images, predicts their flow through regression and eventually distributes them in different rooms with certain capacities.
+Written in Italian, it refers to [Celephais](https://github.com/morpheusthewhite/celephais/), an application that detects the number of students present in the given images, predicts their flow through regression and eventually distributes them in different rooms with certain capacities.
 
 ## Compilation
 
