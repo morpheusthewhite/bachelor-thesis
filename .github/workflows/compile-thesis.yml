@@ -1,0 +1,15 @@
+name: compile-thesis
+on: push
+jobs:
+  compile-thesis:
+    name: Compile thesis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: xu-cheng/latex-action@v2
+        with:
+            root_file: thesis.tex
+            latexmk_shell_escape: true
+
+    # name: Compile thesis and upload it
